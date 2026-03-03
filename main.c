@@ -4,7 +4,7 @@
 extern void* th_module(void* arg);
 extern void* vital_module(void* arg);
 extern void* rule_module(void* arg);
-extern void* db_module(void* arg);
+//extern void* db_module(void* arg);
 extern void* send_module(void* arg);
 
 // 큐 인스턴스 실제 생성
@@ -25,14 +25,14 @@ int main() {
     pthread_create(&threads[0], NULL, th_module, NULL);
     pthread_create(&threads[1], NULL, vital_module, NULL);
     pthread_create(&threads[2], NULL, rule_module, NULL);
-    pthread_create(&threads[3], NULL, db_module, NULL);
-    pthread_create(&threads[4], NULL, send_module, NULL);
+    //pthread_create(&threads[3], NULL, db_module, NULL);
+    pthread_create(&threads[3], NULL, send_module, NULL);
 
     printf("[Master] 모든 모듈 스레드가 성공적으로 생성되었습니다.\n");
 
     // 4. 스레드 종료 대기 (메인 프로세스가 먼저 죽지 않도록 join)
     // 실제 운영 시에는 여기서 스레드 상태를 감시하는 로직을 추가할 수 있음
-    for(int i = 0; i < 5; i++) {
+    for(int i = 0; i < 4; i++) {
         pthread_join(threads[i], NULL);
     }
 

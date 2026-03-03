@@ -63,7 +63,8 @@ typedef struct {
 
 /* --- [3] Thread-Safe Queue 및 시스템 함수 --- */
 
-#define QUEUE_SIZE 20
+#define QUEUE_SIZE 2000
+
 typedef struct {
     void* data[QUEUE_SIZE];
     int head, tail, count;

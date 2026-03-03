@@ -14,7 +14,7 @@ TEST_RULE_TARGET = test_rule
 
 # 공통 소스 파일 (테스트와 메인 모두에서 사용)
 COMMON_SRCS = queue.c
-MODULE_SRCS = th_module.c vital_module.c rule_module.c db_module.c send_module.c
+MODULE_SRCS = th_module.c vital_module.c rule_module.c send_module.c
 MAIN_SRCS = main.c
 
 # 3. 빌드 규칙
