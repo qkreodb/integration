@@ -70,7 +70,6 @@ void* th_module(void* arg) {
         packet->payload.th.time = time(NULL);
 
         q_push(&q_th, packet);
-        printf("[TH] 수집: %.1f°C, %.1f%%\n", packet->payload.th.temp, packet->payload.th.humd);
         sleep(5);
     }
     return NULL;

@@ -73,6 +73,7 @@ typedef struct {
 } TSQueue;
 
 extern TSQueue q_th, q_vital, q_db, q_send;
+extern pthread_mutex_t g_mtx;
 
 void q_init(TSQueue *q);
 void q_push(TSQueue *q, void* item);

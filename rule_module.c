@@ -76,7 +76,6 @@ typedef struct {
 
 static ThWpState  g_th_by_wp[MAX_WP_ID + 1];
 static WatchState g_watch[MAX_SEN_ID + 1];
-static pthread_mutex_t g_mtx = PTHREAD_MUTEX_INITIALIZER;
 
 // =====================
 // Active list (A 방식)
@@ -169,7 +168,7 @@ static void on_th_data(const THData* th) {
     }
     
     if (th->wp_id < 0 || th->wp_id > MAX_WP_ID) return;
-
+    
     pthread_mutex_lock(&g_mtx);
     g_th_by_wp[th->wp_id].used = 1;
     g_th_by_wp[th->wp_id].last = *th;
@@ -253,9 +252,6 @@ static void emit_event(int sen_id, int wp_id, const char* state_code) {
 // WD(Vital) 처리: 판단 + 이벤트 발생
 // =====================
 static void on_vital_data(const VitalData* wd) {
-
-printf("%d | %d", wd->sen_id, wd->wp_id);
-
     if (wd->sen_id < 0 || wd->sen_id > MAX_SEN_ID) {
     	return;
     }
@@ -361,7 +357,7 @@ printf("%d | %d", wd->sen_id, wd->wp_id);
     if (send_emergency)  emit_event(sen_id, wp_id, STATE_EMERGENCY_REST);
 
     // ===== 로그 =====
-    printf("[WD] sen_id=%d wp_id=%d hr=%.1f sk=%.2f HI=%.2f | base(hr=%.1f,tp=%.2f) | streak=%d/%d | law=%d/%d\n",
+    printf("[WD] 센서 ID=%d | 작업장=%d | 심박수=%.1f | 피부온도=%.2f | HI=%.2f | base(hr=%.1f,tp=%.2f) | streak=%d/%d | law=%d/%d\n",
            sen_id, wp_id, wd->hr, wd->sk_temp, hi,
            base_hr, base_tp,
            streak_now, HS_STREAK_SAMPLES,
@@ -453,8 +449,7 @@ static void* vital_rx_thread(void* arg) {
             on_vital_data(&pkt->payload.vital);
             
             // 룰 판단 후 원본 패킷을 그대로 q_db로 넘김
-            q_push(&q_db, pkt);
-            
+            q_push(&q_db, pkt);            
         } else {
             free(pkt);
         }
